@@ -1,0 +1,31 @@
+apiVersion: v1 # as group is 'core', we can omit it
+kind: Service
+metadata:
+  name: backend_service
+spec: 
+  selector: # identity which other resources should be controlled, here whicg pods should be selected for this service
+    #  no matchLabels as it only have matchLabels
+    app: second-app
+    tier: backend
+  ports: 
+    - protocol: 'TCP'
+      port: 5001 #external port through which we can interact
+      targetPort: 5000 #inside port
+    #  - protocol: 'TCP'
+    #   port: 5001 
+    #   targetPort: 5000 
+  # type: ClusterIP # it default, expose internally inside the cluster
+  # type: NodePort # expose IP and worker node
+  type: LoadBalancer # outside world access
+
+
+# applying the file
+# kubectl apply -f service.yaml
+
+# expose the service
+# minikube service backend_service
+  # backend_service: service name
+
+# deleting deployment/service in imprative way
+# kubectl delete -f=deployment.yaml -f service.yaml
+  

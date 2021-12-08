@@ -1,0 +1,38 @@
+# put the service first
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend_service
+spec: 
+  selector:
+    app: second-app
+    tier: backend
+  ports: 
+    - protocol: 'TCP'
+      port: 5001 
+      targetPort: 5000
+  type: LoadBalancer 
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metaData:
+  name: second-app
+spec: 
+  selector: 
+    matchLabels:
+      app: second-app
+      tier: backend
+  replicas: 1 
+  template: 
+    kind: Pod 
+    metadata:
+      labels: 
+        app: second-app 
+        tier: backend
+    spec:
+      containers: 
+        - name: second-node 
+          image: bhagat9198/kub-test

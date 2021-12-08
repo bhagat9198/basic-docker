@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metaData:
+  name: second-app
+spec: # specification for overall deployment
+  selector: # 3 its imp
+    matchLabels: # key-value pair of the path labels that matched with this deployment 
+    # template will tell which all pods are to be created at the time of development(ie when this file is applied) and these will be dynamic
+    # if we scale up the number of pods  after the deployment has been careted, these new pods which are creted will be managed automtically by the exsisiting deployment.
+    # deployment continously watches the pods which are out there and check if any pods should be managed.
+    # thus, it selects the pods which should be controlled and this done by selector. 
+    # selectors is used in mostly all th things such as services . it so it has many types - machlabels and matchExpresstions(complex)
+      app: second-app
+      tier: backend
+  replicas: 1 # default is 1 if not metioned. can be 0 also if no pods should be created at time of development
+  template: # pods should be created as part of deployment (kubectl create deployment first-app --image=bhagat9198/kub-test) telling the image name
+    kind: Pod #its by default, template contains Pod, thus not req to write
+    metadata: # metadata is object in kubernetes - defining the pod 
+      labels: # we can have n-number of labels
+        # deployment: second-app
+        app: second-app  # key-value can be anything
+        tier: backend
+    spec: # specification for a Pod
+      containers: # lis t of containers
+        - name: second-node # value can be anything
+          image: bhagat9198/kub-test
+        # - name: second-node2
+        #   image: bhagat9198/kub-test:2
+
+# connecting this file to cluster (minikube/aws, etc)
+# kubectl apply -f=deployment.yaml # (deployment.yaml is file name) 
